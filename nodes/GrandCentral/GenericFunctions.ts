@@ -28,6 +28,7 @@ export async function gcApiRequest(
 		qs,
 		body,
 		uri: uri || `https://api.grandcentr.al/v1${resource}`,
+		// uri: uri || `http://api.gc.local/v1${resource}`,
 		json: true,
 	};
 

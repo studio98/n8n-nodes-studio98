@@ -794,12 +794,17 @@ export class Grandcentral implements INodeType {
 
 		const operation = this.getNodeParameter('operation', 0);
 
-		const params = this.getNode().parameters;
+		const nodeParams = this.getNode().parameters;
 
+		const evaluatedParams: { [key: string]: any } = {};
+
+for (const key of Object.keys(nodeParams)) {
+    evaluatedParams[key] = this.getNodeParameter(key, 0);
+}
 		for (let i = 0; i < length; i++) {
 			const body: IDataObject = {
 				operation,
-				params,
+				params: evaluatedParams,
 			};
 
 			responseData = await gcApiRequest.call(this, 'POST', '/automations/action', body);
