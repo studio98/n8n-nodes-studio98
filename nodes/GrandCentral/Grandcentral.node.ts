@@ -1,10 +1,12 @@
 import type {
+	IDataObject,
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
 import { NodeConnectionType } from 'n8n-workflow';
+import { gcApiRequest } from './GenericFunctions';
 
 
 export class Grandcentral implements INodeType {
@@ -19,7 +21,6 @@ export class Grandcentral implements INodeType {
 		defaults: {
 			name: 'GrandCentral',
 		},
-		usableAsTool: true,
 		// eslint-disable-next-line n8n-nodes-base/node-class-description-inputs-wrong-regular-node
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
@@ -359,7 +360,7 @@ export class Grandcentral implements INodeType {
 		{
 				"displayName": "Status",
 				"name": "status",
-				"type": "string",
+				"type": "options",
 				"default": "",
 				"displayOptions":
 				{
@@ -369,7 +370,20 @@ export class Grandcentral implements INodeType {
 								"operation": ["App\\Automations\\Actions\\Deals\\ChangeDealStatus"]
 						}
 				},
-				"required": true
+				"required": true,
+				"options": [
+				{
+						"name": "Open",
+						"value": "in_progress"
+				},
+				{
+						"name": "Won",
+						"value": "won"
+				},
+				{
+						"name": "Lost",
+						"value": "lost"
+				}]
 		},
 		{
 				"displayName": "Deal Board",
@@ -434,7 +448,7 @@ export class Grandcentral implements INodeType {
 		{
 				"displayName": "No Value",
 				"name": "noValue",
-				"type": "string",
+				"type": "boolean",
 				"default": "",
 				"displayOptions":
 				{
@@ -599,7 +613,7 @@ export class Grandcentral implements INodeType {
 		{
 				"displayName": "Untag All Contacts",
 				"name": "untagAllContacts",
-				"type": "string",
+				"type": "boolean",
 				"default": "",
 				"displayOptions":
 				{
@@ -644,7 +658,7 @@ export class Grandcentral implements INodeType {
 		{
 				"displayName": "Tag All Contacts",
 				"name": "tagAllContacts",
-				"type": "string",
+				"type": "boolean",
 				"default": "",
 				"displayOptions":
 				{
@@ -704,7 +718,7 @@ export class Grandcentral implements INodeType {
 		{
 				"displayName": "Priority",
 				"name": "priority",
-				"type": "string",
+				"type": "options",
 				"default": "",
 				"displayOptions":
 				{
@@ -714,7 +728,24 @@ export class Grandcentral implements INodeType {
 								"operation": ["App\\Automations\\Actions\\Todo\\AddTodoTask"]
 						}
 				},
-				"required": false
+				"required": false,
+				"options": [
+				{
+						"name": "Low",
+						"value": "low"
+				},
+				{
+						"name": "Normal",
+						"value": "normal"
+				},
+				{
+						"name": "High",
+						"value": "high"
+				},
+				{
+						"name": "Urgent",
+						"value": "urgent"
+				}]
 		},
 		{
 				"displayName": "Due Date",
@@ -756,15 +787,29 @@ export class Grandcentral implements INodeType {
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		// const items = this.getInputData();
+		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
-		// const length = items.length;
-		// const qs: IDataObject = {};
-		// let responseData;
+		const length = items.length;
+		let responseData;
 
-		// const resource = this.getNodeParameter('resource', 0);
-		// const operation = this.getNodeParameter('operation', 0);
+		const operation = this.getNodeParameter('operation', 0);
 
+		const params = this.getNode().parameters;
+
+		for (let i = 0; i < length; i++) {
+			const body: IDataObject = {
+				operation,
+				params,
+			};
+
+			responseData = await gcApiRequest.call(this, 'POST', '/automations/action', body);
+
+			const executionData =  this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData as IDataObject[]),
+				{ itemData: { item: i } },
+			);
+			returnData.push(...executionData);
+		}
 
 		return [returnData];
 	}
