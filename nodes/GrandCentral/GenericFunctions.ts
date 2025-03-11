@@ -27,7 +27,7 @@ export async function gcApiRequest(
 		method,
 		qs,
 		body,
-		uri: uri || `http://api.gc.local/v1${resource}`,
+		uri: uri || `https://api.grandcentr.al/v1${resource}`,
 		json: true,
 	};
 
