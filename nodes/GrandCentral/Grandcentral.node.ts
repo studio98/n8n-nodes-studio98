@@ -21,6 +21,7 @@ export class Grandcentral implements INodeType {
 		defaults: {
 			name: 'GrandCentral',
 		},
+		usableAsTool: true,
 		// eslint-disable-next-line n8n-nodes-base/node-class-description-inputs-wrong-regular-node
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
