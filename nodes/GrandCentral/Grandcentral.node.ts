@@ -12,7 +12,7 @@ import { gcApiRequest } from './GenericFunctions';
 export class Grandcentral implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'GrandCentral',
-		name: 'grandCentral',
+		name: 'grandcentral',
 		icon: 'file:gc.svg',
 		group: ['output'],
 		version: 1,

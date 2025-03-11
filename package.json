@@ -34,7 +34,8 @@
       "dist/credentials/GCApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/GrandCentral/GrandcentralTrigger.node.js"
+      "dist/nodes/GrandCentral/GrandcentralTrigger.node.js",
+      "dist/nodes/GrandCentral/Grandcentral.node.js"
     ]
   },
   "devDependencies": {
