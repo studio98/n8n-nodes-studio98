@@ -32,7 +32,7 @@ export class GCApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'http://api.grandcentr.al/v1',
+			baseURL: 'https://api.grandcentr.al/v1',
 			url: '/authorize',
 		},
 	};
