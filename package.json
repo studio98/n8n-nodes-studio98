@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-studio98",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Studio98 nodes for n8n",
   "keywords": [
     "n8n-studio98",
@@ -49,6 +49,6 @@
     "n8n-workflow": "*"
   },
   "publishConfig": {
-  "access": "public"
-}
+    "access": "public"
+  }
 }
